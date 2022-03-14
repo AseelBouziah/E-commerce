@@ -17,9 +17,11 @@ class CheckLogin
      */
     public function handle(Request $request, Closure $next)
     {
-        if($request->login){
-            return redirect('category');
+        if (!$request->session()->exists('admin_id')) {
+            // user value cannot be found in session
+            return redirect('/');
         }
+
         return $next($request);
     }
 }

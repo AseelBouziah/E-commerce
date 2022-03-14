@@ -17,9 +17,9 @@ class CheckLogin
      */
     public function handle(Request $request, Closure $next)
     {
-        if(Auth::check()){
-            return $next($request);
+        if($request->login){
+            return redirect('category');
         }
-        return route('login');
+        return $next($request);
     }
 }

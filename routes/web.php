@@ -24,7 +24,7 @@ Route::get('/', [LoginController::class,'index'])->name('login');
 Route::post('/',[LoginController::class,'login'])->name('login');
 
 //category
-Route::get('/categories',[CategoryController::class,'index'])->name('category');
+Route::get('/categories',[CategoryController::class,'index'])->name('category')->middleware('CheckLogin');
 Route::get('/create', [CategoryController::class,'create'])->name('create');
 Route::post('/store', [CategoryController::class,'store'])->name('store');
 Route::get('/edit/{id}', [CategoryController::class,'edit'])->name('edit');

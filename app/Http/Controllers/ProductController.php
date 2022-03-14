@@ -62,7 +62,10 @@ class ProductController extends Controller
         }
         $product->price=$request->price;
         $request->file('image')->store('public/images');
-        $product->image_path = $request->file('image');
+        $image=$request->file('image');
+        $image_name = $image->getClientOriginalName();
+        $image->move(public_path('/uploads'),$image_name);
+        $product->image_path = $image_name;
 
         
      //   $categoryParent=$request->parent;//name of select category
@@ -125,7 +128,10 @@ class ProductController extends Controller
         $product->name = $reques->input('name');
         $product->description = $reques->input('description');
         $product->price = $reques->input('price');
-        $product->image_path = $reques->input('image');
+        $image=$reques->input('image');
+        $image_name = $image->getClientOriginalName();
+        $image->move(public_path('/uploads'),$image_name);
+        $product->image_path = $image_name;
        // $reques->file('image')->store('public/images');
        $categoryParents = $reques->input('parent');
        foreach($categoryParents as $parent){

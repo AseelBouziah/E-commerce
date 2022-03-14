@@ -51,8 +51,10 @@ class CategoryController extends Controller
 
         $category = new Category;
         $category->name = $request->name;
-        $request->file('image')->store('public/images');
-        $category->image_path = $request->file('image')->getClientOriginalName();
+        $image=$request->file('image');
+        $image_name = $image->getClientOriginalName();
+        $image->move(public_path('/uploads'),$image_name);
+        $category->image_path = $image_name;
 
 
         if ($category->save()) {
@@ -97,7 +99,10 @@ class CategoryController extends Controller
         //
         $category = Category::find($id);
         $category->name = $reques->input('name');
-        $category->image_path = $reques->input('image');
+        $image=$reques->input('image');
+        $image_name = $image->getClientOriginalName();
+        $image->move(public_path('/uploads'),$image_name);
+        $category->image_path = $image_name;
 
         $category->update();
         return redirect()->route('category')->with(['success' => 'Category successfully updated.']);

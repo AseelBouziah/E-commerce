@@ -47,44 +47,50 @@ class ProductController extends Controller
         $input['category'] = $request->input('category');
 
         $validated = $request->validate([
-            'name' => ['required',Rule::unique('products')],
-            'description' => ['nullable', 'string','min:0', 'max:2000'],
+            'name' => ['required', Rule::unique('products')],
+            'description' => ['nullable', 'string', 'min:0', 'max:2000'],
             'price' => ['required', 'numeric'],
-            'image' => 'required|mimes:png,jpg,jpeg,csv,txt,xlx,xls,pdf|max:2048'
+            'image' => 'required'
         ]);
 
         $product = new Product;
         $product->name = $request->name;
-        if(!empty($request->input('description'))) {
-            $product->description=$request->description;
+        if (!empty($request->input('description'))) {
+            $product->description = $request->description;
         } else {
-            $product->description="No description";
+            $product->description = "No description";
         }
-        $product->price=$request->price;
-        $request->file('image')->store('public/images');
-        $image=$request->file('image');
+        $product->price = $request->price;
+        $isChecked = $request->status;
+        if($isChecked != null){
+            $product->distinctive = "yes";
+        }else{
+            $product->distinctive = "no";
+        }
+       // $request->file('image')->store('public/images');
+        $image = $request->file('image');
         $image_name = $image->getClientOriginalName();
-        $image->move(public_path('/uploads'),$image_name);
-        $product->image_path = $image_name;
+        $image->move(public_path('/uploads'), $image_name);
+        $product->image_path = $image;
 
-        
-     //   $categoryParent=$request->parent;//name of select category
-     //   $category = Category::find($categoryParent);
+
+
+        //   $categoryParent=$request->parent;//name of select category
+        //   $category = Category::find($categoryParent);
 
         if ($product->save()) {
             $categoryParents = $request->input('parent');
-         foreach($categoryParents as $parent){
-            $category = Category::find($parent);
-            $category = Category::find($category->id);
-            $product->categories()->attach($category);
-           }
-         //   $category = Category::find($category->id);
-         //   $product->categories()->attach($category);
+            foreach ($categoryParents as $parent) {
+                $category = Category::find($parent);
+                $category = Category::find($category->id);
+                $product->categories()->attach($category);
+            }
+            //   $category = Category::find($category->id);
+            //   $product->categories()->attach($category);
             return redirect()->route('product')->with(['success' => 'Category added successfully.']);
         }
 
         return redirect()->route('create_pro')->with(['fail' => 'Unable to add category.']);
-        
     }
 
     /**
@@ -104,14 +110,14 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function edit(Product $product,$id)
+    public function edit(Product $product, $id)
     {
         //
         $product = Product::find($id);
         $data['product'] = $product;
         $categories = Category::all();
         $data2['categories'] = $categories;
-        return view('admin.product.edit',$data,$data2);
+        return view('admin.product.edit', $data, $data2);
     }
 
     /**
@@ -121,24 +127,31 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $reques,$id)
+    public function update(Request $reques, $id)
     {
         //
         $product = Product::find($id);
+        $status = $reques->input('status');
+        if ($status == 'on') {
+            $product->distinctive = 'yes';
+        } else
+            $product->distinctive = 'no';
+
         $product->name = $reques->input('name');
         $product->description = $reques->input('description');
         $product->price = $reques->input('price');
-        $image=$reques->input('image');
+        $image = $reques->input('image');
         $image_name = $image->getClientOriginalName();
-        $image->move(public_path('/uploads'),$image_name);
+        $image->move(public_path('/uploads'), $image_name);
         $product->image_path = $image_name;
-       // $reques->file('image')->store('public/images');
-       $categoryParents = $reques->input('parent');
-       foreach($categoryParents as $parent){
-          $category = Category::find($parent);
-          $category = Category::find($category->id);
-          $product->categories()->sync($category);
-         }
+        // $reques->file('image')->store('public/images');
+        $categoryParents = $reques->input('parent');
+        foreach ($categoryParents as $parent) {
+            $category = Category::find($parent);
+            $category = Category::find($category->id);
+            $product->categories()->sync($category);
+        }
+
 
         $product->update();
         return redirect()->route('product')->with(['success' => 'Product successfully updated.']);
@@ -153,7 +166,7 @@ class ProductController extends Controller
     public function destroy($id)
     {
         //
-        $product = Product::find($id); 
+        $product = Product::find($id);
         $product->delete();
         return redirect()->route('product')->with(['success' => 'Product successfully destroy.']);
     }

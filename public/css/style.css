@@ -37,3 +37,13 @@
   font-weight: bold;
   font-style: italic;
 }
+
+.cart{
+    width: 280px;
+}
+.order{
+    border: 1px black solid;
+    background-color: white;
+    padding: 3px;
+    margin: 5px;
+}

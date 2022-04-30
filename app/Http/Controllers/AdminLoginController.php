@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Login;
+use App\Models\AdminLogin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
-class LoginController extends Controller
+class AdminLoginController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +27,7 @@ class LoginController extends Controller
         ]);
         $email = $req->input('email');
         $password = $req->input('password');
-        $admin_info = Login::where('email',$email)->first();
+        $admin_info = AdminLogin::where('email',$email)->first();
         $hashed_pass = $admin_info->password;
         $result = Hash::check($password,$hashed_pass);
 
@@ -40,6 +40,7 @@ class LoginController extends Controller
             return redirect()->route('login')->with('message', 'Unable to login Please check that your email or password is correct!');
         }
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -65,10 +66,10 @@ class LoginController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Login  $login
+     * @param  \App\Models\AdminLogin  $adminLogin
      * @return \Illuminate\Http\Response
      */
-    public function show(Login $login)
+    public function show(AdminLogin $adminLogin)
     {
         //
     }
@@ -76,10 +77,10 @@ class LoginController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Login  $login
+     * @param  \App\Models\AdminLogin  $adminLogin
      * @return \Illuminate\Http\Response
      */
-    public function edit(Login $login)
+    public function edit(AdminLogin $adminLogin)
     {
         //
     }
@@ -88,10 +89,10 @@ class LoginController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Login  $login
+     * @param  \App\Models\AdminLogin  $adminLogin
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Login $login)
+    public function update(Request $request, AdminLogin $adminLogin)
     {
         //
     }
@@ -99,10 +100,10 @@ class LoginController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Login  $login
+     * @param  \App\Models\AdminLogin  $adminLogin
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Login $login)
+    public function destroy(AdminLogin $adminLogin)
     {
         //
     }

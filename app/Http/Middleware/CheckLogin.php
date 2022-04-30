@@ -17,11 +17,11 @@ class CheckLogin
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!$request->session()->exists('admin_id')) {
+        if ($request->session()->exists('admin_id')) {
             // user value cannot be found in session
-            return redirect('/');
+            return $next($request);
         }
 
-        return $next($request);
+        return response()->json('Your account is inactive');
     }
 }

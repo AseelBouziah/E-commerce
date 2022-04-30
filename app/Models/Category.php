@@ -9,7 +9,7 @@ class Category extends Model
 {
     use HasFactory;
     public $timestamps = false;
-    protected $fillable = ['name','image_path'];
+    protected $fillable = ['category','parent_category'];
 
 
 

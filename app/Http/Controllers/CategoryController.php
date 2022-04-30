@@ -43,18 +43,15 @@ class CategoryController extends Controller
     {
         //
         $validated = $request->validate([
-            'name' => ['required',Rule::unique('categories')],
-            'image' => 'required|mimes:png,jpg,jpeg,csv,txt,xlx,xls,pdf|max:2048'
+            'name' => ['required'],
+            'parent' => ['required']
 
         ]);
       
 
         $category = new Category;
-        $category->name = $request->name;
-        $image=$request->file('image');
-        $image_name = $image->getClientOriginalName();
-        $image->move(public_path('/uploads'),$image_name);
-        $category->image_path = $image_name;
+        $category->category = $request->name;
+        $category->parent_category= $request->parent;
 
 
         if ($category->save()) {
@@ -98,11 +95,9 @@ class CategoryController extends Controller
     {
         //
         $category = Category::find($id);
-        $category->name = $reques->input('name');
-        $image=$reques->input('image');
-        $image_name = $image->getClientOriginalName();
-        $image->move(public_path('/uploads'),$image_name);
-        $category->image_path = $image_name;
+        $category->category = $reques->input('name');
+        $category->parent_category = $reques->input('parent');
+
 
         $category->update();
         return redirect()->route('category')->with(['success' => 'Category successfully updated.']);

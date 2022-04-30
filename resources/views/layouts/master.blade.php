@@ -76,10 +76,22 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Products Action:</h6>
                         <a class="collapse-item" href="{{ route('product') }}">View Product</a>
-                        <a class="collapse-item" href="{{ route('create_pro') }}">Create Product</a>
+                        <a class="collapse-item" href="{{ route('create.product') }}">Create Product</a>
                     </div>
                 </div>
             </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('contact') }}">
+                    <span>Contacts Messages</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('orders') }}">
+                    <span>View Orders</span>
+                </a>
+            </li>
+
 
             <!-- Divider -->
             <hr class="sidebar-divider">
